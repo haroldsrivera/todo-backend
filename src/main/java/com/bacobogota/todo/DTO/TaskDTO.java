@@ -1,13 +1,21 @@
 package com.bacobogota.todo.DTO;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDate;
 
 public class TaskDTO {
 
     private Long id;
+
+    @NotBlank(message = "El título no puede estar vacío")
     private String title;
+
+    @NotBlank(message = "La descripción no puede estar vacía")
     private String description;
 
+    @NotNull(message = "La fecha no puede ser nula")
     private LocalDate date;
 
     public TaskDTO() {
@@ -51,6 +59,4 @@ public class TaskDTO {
     public void setDate(LocalDate date) {
         this.date = date;
     }
-
-
 }

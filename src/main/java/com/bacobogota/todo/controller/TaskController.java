@@ -4,6 +4,7 @@ import com.bacobogota.todo.DTO.TaskDTO;
 import com.bacobogota.todo.model.Task;
 import com.bacobogota.todo.service.TaskService;
 import com.bacobogota.todo.mapper.TaskMapper;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,9 +25,9 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-    // Endpoint para crear una nueva tarea
+
     @PostMapping
-    public ResponseEntity<Map<String, String>> createTask(@RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<Map<String, String>> createTask(@Valid @RequestBody TaskDTO taskDTO) {
         Task task = TaskMapper.toEntity(taskDTO);
         taskService.saveTask(task);
 
@@ -35,6 +36,7 @@ public class TaskController {
 
         return ResponseEntity.ok(response);
     }
+
 
     // Endpoint para retornar todas las tareas
     @GetMapping
