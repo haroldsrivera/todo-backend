@@ -20,6 +20,11 @@ public class TaskService {
         return taskRepository.findAll();
     }
 
+    public Task getTaskById(Long id) {
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Tarea no encontrada con el id: " + id));
+    }
+
     public Task saveTask(Task task) {
         return taskRepository.save(task);
     }
@@ -30,4 +35,16 @@ public class TaskService {
         }
         taskRepository.deleteById(id);
     }
+
+    public Task updateTask(Long id, Task taskDetails) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Tarea no encontrada"));
+
+        task.setTitle(taskDetails.getTitle());
+        task.setDescription(taskDetails.getDescription());
+        task.setDate(taskDetails.getDate());
+
+        return taskRepository.save(task);
+    }
+
 }

@@ -9,13 +9,13 @@ public class TaskDTO {
 
     private Long id;
 
-    @NotBlank(message = "El título no puede estar vacío")
+    @NotBlank(message = "El título es obligatorio")
     private String title;
 
-    @NotBlank(message = "La descripción no puede estar vacía")
+    @NotBlank(message = "La descripción es obligatoria")
     private String description;
 
-    @NotNull(message = "La fecha no puede ser nula")
+    @NotNull(message = "La fecha es obligatoria")
     private LocalDate date;
 
     public TaskDTO() {

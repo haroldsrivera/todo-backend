@@ -61,21 +61,25 @@ public class TaskControllerTest {
         taskDTO.setDate(LocalDate.parse("2025-04-12"));
 
         Task task = TaskMapper.toEntity(taskDTO);
+        task.setId(1L); // Asegúrate de setear un ID si se espera
         when(taskService.saveTask(any(Task.class))).thenReturn(task);
 
         String jsonRequest = """
-            {
-                "title": "Task 1",
-                "description": "Description 1",
-                "date": "2025-04-12"
-            }""";
+        {
+            "title": "Task 1",
+            "description": "Description 1",
+            "date": "2025-04-12"
+        }""";
 
         mockMvc.perform(post("/tasks")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.message").value("Tarea creada exitosamente"));
+                .andExpect(jsonPath("$.title").value("Task 1"))
+                .andExpect(jsonPath("$.description").value("Description 1"))
+                .andExpect(jsonPath("$.date").value("2025-04-12"));
     }
+
 
     @Test
     void testDeleteTask_Success() throws Exception {
@@ -93,5 +97,39 @@ public class TaskControllerTest {
         mockMvc.perform(delete("/tasks/1"))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.error").value("Tarea no encontrada"));
+    }
+
+    @Test
+    void testUpdateTask_Success() throws Exception {
+        TaskDTO taskDTO = new TaskDTO();
+        taskDTO.setTitle("Updated Task");
+        taskDTO.setDescription("Updated Description");
+        taskDTO.setDate(LocalDate.parse("2025-04-12"));
+
+        Task updatedTask = new Task(1L, "Updated Task", "Updated Description", LocalDate.parse("2025-04-12"));
+        when(taskService.updateTask(any(Long.class), any(Task.class))).thenReturn(updatedTask);
+
+        String jsonRequest = """
+            {
+                "title": "Updated Task",
+                "description": "Updated Description",
+                "date": "2025-04-12"
+            }""";
+
+        mockMvc.perform(put("/tasks/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Updated Task"));
+    }
+
+    @Test
+    void findById() throws Exception {
+        Task task = new Task(1L, "Task 1", "Description 1", LocalDate.parse("2025-04-12"));
+        when(taskService.getTaskById(1L)).thenReturn(task);
+
+        mockMvc.perform(get("/tasks/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value("Task 1"));
     }
 }

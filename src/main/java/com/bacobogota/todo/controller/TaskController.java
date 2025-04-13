@@ -25,18 +25,19 @@ public class TaskController {
         this.taskService = taskService;
     }
 
-
+    // Endpoint para crear una nueva tarea
     @PostMapping
-    public ResponseEntity<Map<String, String>> createTask(@Valid @RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<TaskDTO> createTask(@Valid @RequestBody TaskDTO taskDTO) {
         Task task = TaskMapper.toEntity(taskDTO);
-        taskService.saveTask(task);
-
-        Map<String, String> response = new HashMap<>();
-        response.put("message", "Tarea creada exitosamente");
-
-        return ResponseEntity.ok(response);
+        Task savedTask = taskService.saveTask(task);
+        return ResponseEntity.ok(TaskMapper.toDTO(savedTask));
     }
-
+    // Endpoint para obtener una tarea por ID
+    @GetMapping("/{id}")
+    public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
+        Task task = taskService.getTaskById(id);
+        return ResponseEntity.ok(TaskMapper.toDTO(task));
+    }
 
     // Endpoint para retornar todas las tareas
     @GetMapping
@@ -64,4 +65,13 @@ public class TaskController {
             return ResponseEntity.status(404).body(error);
         }
     }
+
+    // Endpoint para actualizar una tarea por ID
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @Valid @RequestBody TaskDTO taskDTO) {
+        Task task = TaskMapper.toEntity(taskDTO);
+        Task updatedTask = taskService.updateTask(id, task);
+        return ResponseEntity.ok(TaskMapper.toDTO(updatedTask));
+    }
+
 }

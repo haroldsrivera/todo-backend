@@ -15,10 +15,8 @@ public class Task {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "El título no puede estar vacío")
     private String title;
 
-    @NotBlank(message = "La descripción no puede estar vacía")
     private String description;
     private LocalDate date;
 
