@@ -1,5 +1,6 @@
 package com.bacobogota.todo.DTO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -16,6 +17,7 @@ public class TaskDTO {
     private String description;
 
     @NotNull(message = "La fecha es obligatoria")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate date;
 
     public TaskDTO() {

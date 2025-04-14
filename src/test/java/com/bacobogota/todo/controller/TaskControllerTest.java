@@ -61,7 +61,7 @@ public class TaskControllerTest {
         taskDTO.setDate(LocalDate.parse("2025-04-12"));
 
         Task task = TaskMapper.toEntity(taskDTO);
-        task.setId(1L); // Asegúrate de setear un ID si se espera
+        task.setId(1L);
         when(taskService.saveTask(any(Task.class))).thenReturn(task);
 
         String jsonRequest = """
